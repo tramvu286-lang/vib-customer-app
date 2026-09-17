@@ -122,7 +122,6 @@ st.sidebar.title("🏦 VIB")
 st.sidebar.image(
     "logo VIB.jpg", width=120
 )
-)
 
 page = st.sidebar.radio(
     "MENU",
@@ -794,3 +793,4 @@ elif page == "🚪 Đăng xuất":
     st.session_state.logged_in = False
 
     st.rerun()
+
