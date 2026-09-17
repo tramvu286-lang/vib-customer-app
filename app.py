@@ -119,8 +119,8 @@ if not st.session_state.logged_in:
 
 st.sidebar.title("🏦 VIB")
 
-st.sidebar.caption(
-    "HỆ THỐNG QUẢN LÝ KHÁCH HÀNG"
+st.sidebar.image(
+    "logo VIB.jpg", width=120
 )
 
 page = st.sidebar.radio(
@@ -143,7 +143,7 @@ page = st.sidebar.radio(
 
 if page == "📊 Tổng quan":
 
-    st.title("📊 TỔNG QUAN")
+    st.image("logo VIB.jpg", width=180)
 
     st.write(
         "Tổng quan tình hình quản lý khách hàng."
