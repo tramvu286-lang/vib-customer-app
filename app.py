@@ -150,12 +150,13 @@ if page == "📊 Tổng quan":
     )
 
     st.divider()
-total_customers = len(
+
+    total_customers = len(
         st.session_state.customers
     )
 
     total_care = len(
-    st.session_state.care_history
+        st.session_state.care_history
     )
 
     total_appointments = len(
@@ -295,7 +296,7 @@ elif page == "👤 Nhập khách hàng":
     )
 
     note = st.text_area(
-      "📝 Ghi chú",
+        "📝 Ghi chú",
         placeholder="Nhập ghi chú"
     )
 
@@ -440,7 +441,8 @@ elif page == "📞 Chăm sóc khách hàng":
     st.write(
         "Ghi nhận quá trình chăm sóc khách hàng."
     )
-  st.divider()
+
+    st.divider()
 
     if len(
         st.session_state.customers
@@ -511,3 +513,283 @@ elif page == "📞 Chăm sóc khách hàng":
 
                 "Số điện thoại":
                     customer["Số điện thoại"],
+
+                "Hình thức":
+                    method,
+
+                "Nội dung":
+                    content,
+
+                "Kết quả":
+                    result,
+
+                "Ngày chăm sóc tiếp theo":
+                    str(next_contact)
+            }
+
+            st.session_state.care_history.append(
+                care
+            )
+
+            st.success(
+                "✅ Đã lưu lịch sử chăm sóc!"
+            )
+
+    st.divider()
+
+    if len(
+        st.session_state.care_history
+    ) > 0:
+
+        st.subheader(
+            "📋 Lịch sử chăm sóc"
+        )
+
+        care_df = pd.DataFrame(
+            st.session_state.care_history
+        )
+
+        st.dataframe(
+            care_df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+
+# ==========================================
+# LỊCH HẸN
+# ==========================================
+
+elif page == "📅 Lịch hẹn":
+
+    st.title(
+        "📅 LỊCH HẸN KHÁCH HÀNG"
+    )
+
+    st.divider()
+
+    if len(
+        st.session_state.customers
+    ) == 0:
+
+        st.info(
+            "📭 Chưa có khách hàng."
+        )
+
+    else:
+
+        df = pd.DataFrame(
+            st.session_state.customers
+        )
+
+        customer_index = st.selectbox(
+            "👤 Khách hàng",
+            range(len(df)),
+            format_func=lambda x:
+                df.iloc[x]["Tên khách hàng"]
+        )
+
+        appointment_date = st.date_input(
+            "📅 Ngày hẹn"
+        )
+
+        appointment_time = st.time_input(
+            "🕐 Giờ hẹn"
+        )
+
+        content = st.text_area(
+            "📝 Nội dung cuộc hẹn"
+        )
+
+        method = st.selectbox(
+            "📍 Hình thức",
+            [
+                "Tại chi nhánh",
+                "Gặp trực tiếp",
+                "Gọi điện",
+                "Online"
+            ]
+        )
+
+        status = st.selectbox(
+            "📌 Trạng thái",
+            [
+                "Đã lên lịch",
+                "Đã hoàn thành",
+                "Đã hủy"
+            ]
+        )
+
+        if st.button(
+            "📅 TẠO LỊCH HẸN",
+            type="primary",
+            use_container_width=True
+        ):
+
+            customer = df.iloc[
+                customer_index
+            ]
+
+            appointment = {
+
+                "Khách hàng":
+                    customer["Tên khách hàng"],
+
+                "Số điện thoại":
+                    customer["Số điện thoại"],
+
+                "Ngày hẹn":
+                    str(appointment_date),
+
+                "Giờ hẹn":
+                    str(appointment_time),
+
+                "Nội dung":
+                    content,
+
+                "Hình thức":
+                    method,
+
+                "Trạng thái":
+                    status
+            }
+
+            st.session_state.appointments.append(
+                appointment
+            )
+
+            st.success(
+                "✅ Đã tạo lịch hẹn!"
+            )
+
+    st.divider()
+
+    if len(
+        st.session_state.appointments
+    ) > 0:
+
+        st.subheader(
+            "📋 Danh sách lịch hẹn"
+        )
+
+        appointment_df = pd.DataFrame(
+            st.session_state.appointments
+        )
+
+        st.dataframe(
+            appointment_df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+
+# ==========================================
+# ADMIN
+# ==========================================
+
+elif page == "🔐 Admin":
+
+    st.title("🔐 ADMIN")
+
+    st.divider()
+
+    if "admin_logged_in" not in st.session_state:
+
+        st.session_state.admin_logged_in = False
+
+    if not st.session_state.admin_logged_in:
+
+        password = st.text_input(
+            "🔑 Mật khẩu Admin",
+            type="password"
+        )
+
+        if st.button(
+            "ĐĂNG NHẬP",
+            type="primary"
+        ):
+
+            if password == "123456":
+
+                st.session_state.admin_logged_in = True
+
+                st.rerun()
+
+            else:
+
+                st.error(
+                    "❌ Sai mật khẩu."
+                )
+
+    else:
+
+        col1, col2 = st.columns([5, 1])
+
+        with col1:
+
+            st.subheader(
+                "📊 QUẢN LÝ DỮ LIỆU"
+            )
+
+        with col2:
+
+            if st.button("🚪 Đăng xuất"):
+
+                st.session_state.admin_logged_in = False
+
+                st.rerun()
+
+        st.divider()
+
+        if len(
+            st.session_state.customers
+        ) == 0:
+
+            st.info(
+                "📭 Chưa có khách hàng."
+            )
+
+        else:
+
+            df = pd.DataFrame(
+                st.session_state.customers
+            )
+
+            st.metric(
+                "👥 Tổng số khách hàng",
+                len(df)
+            )
+
+            st.divider()
+
+            st.dataframe(
+                df,
+                use_container_width=True,
+                hide_index=True
+            )
+
+            st.divider()
+
+            excel_file = export_excel()
+
+            st.download_button(
+                label="📥 XUẤT FILE EXCEL",
+                data=excel_file,
+                file_name="VIB_danh_sach_khach_hang.xlsx",
+                mime=(
+                    "application/vnd.openxmlformats-officedocument."
+                    "spreadsheetml.sheet"
+                ),
+                use_container_width=True
+            )
+
+
+# ==========================================
+# ĐĂNG XUẤT
+# ==========================================
+
+elif page == "🚪 Đăng xuất":
+
+    st.session_state.logged_in = False
+
+    st.rerun()
