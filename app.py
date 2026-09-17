@@ -121,7 +121,7 @@ st.sidebar.title("🏦 VIB")
 
 st.sidebar.image(
     "logo VIB.jpg", width=120
-st.sidebar.markdown("**Ngân hàng Quốc tế**")
+)
 )
 
 page = st.sidebar.radio(
@@ -145,7 +145,6 @@ page = st.sidebar.radio(
 if page == "📊 Tổng quan":
 
     st.image("logo VIB.jpg", width=180)
-    st.markdown("### Ngân hàng quốc tế")
 
     st.write(
         "Tổng quan tình hình quản lý khách hàng."
