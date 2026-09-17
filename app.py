@@ -155,7 +155,7 @@ total_customers = len(
     )
 
     total_care = len(
-        st.session_state.care_history
+    st.session_state.care_history
     )
 
     total_appointments = len(
